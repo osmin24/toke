@@ -9,7 +9,7 @@ const SchemaUsuario = Schema({
     status:{
         type:String,
         required:[true,'Activo','Inactivo'],
-        enum:['Administrador','Docente']
+        enum:['Activo','Inactivo']
     },
     email:{
         type:String,

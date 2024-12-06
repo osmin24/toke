@@ -2,11 +2,12 @@ const {request,response} = require('express')
 const Usuario = require('../models/usuario')
 const bcryptjs = require('bcryptjs')
 const {validationResult} = require('express-validator')
+const usuario = require('../models/usuario')
 
 const postUsuario = async (req=request,res=response) => {
     try{
         const error = validationResult(req)
-        if(error){
+        if(!error){
            return res.status(400).json({msg:'Error ckeck'+error.array()})
         }
 
@@ -39,14 +40,14 @@ const getUsuarios = async (req=request,res=response)=>{
         }
         return res.status(203).json(usuarios)
     }catch(e){
-        return res.status(500).json({msg:'ERROR SERVIDOR:'+E})
+        return res.status(500).json({msg:'ERROR SERVIDOR:'+e})
     }
 }
 
 const getUsuario = async (req=request,res=response) => {
     try{
-        const {email} = req.body
-        const usuario = await Usuario.findOne({email})
+        const {_id} = req.body
+        const usuario = await Usuario.findOne({_id})
         if(!usuario){
             return res.status(400).json({msg:'No existe usuario'})
         }
@@ -56,8 +57,26 @@ const getUsuario = async (req=request,res=response) => {
         return res.status(500).json({msg:'ERROR SERVIDOR:'+e})
     }
 }
+
+const deleteUsuario = async (req=request,res=response) => {
+    try{
+        const error = validationResult(req)
+        if(!error){
+            return res.status(400).json({msg:"Error ckeck cliente: "+error})
+        }
+        const {_id} = req.body
+        const usuarioDelete = await Usuario.findByIdAndDelete({_id})
+        if(!usuarioDelete){
+            return res.status(400).json({msg:'Error de cliente, usuario no registrado'})
+        }
+        return res.status(204).json(usuarioDelete)
+    }catch(e){
+        return res.status(500).json({msg:'ERROR SERVIDOR:'+e})
+    }
+}
 module.exports = {
     postUsuario,
     getUsuarios,
-    getUsuario
+    getUsuario,
+    deleteUsuario,
 }
