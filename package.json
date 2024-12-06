@@ -1,0 +1,20 @@
+{
+  "name": "desarrollo-de-software-seguro-2",
+  "version": "0.0.1",
+  "description": "Software para registrar usuario",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "osmin",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "desarrollo-de-software-seguro-2": "file:",
+    "dotenv": "^16.4.6",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.3"
+  }
+}
