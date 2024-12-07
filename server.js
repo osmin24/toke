@@ -1,14 +1,14 @@
 const app = require('./app')
-const https = require('https')
+/* const https = require('https')
 const fs = require('fs')
-const server = https.createServer(app)
+const server = https.createServer(app) */
 
-const option = {
+/* const option = {
     key:fs.readFileSync('./agent2-key.pem'),
     cert:fs.readFileSync('./agent2-cert.pem')
-}
+} */
 
-server.listen(app.get('port'),option,() => {
+app.listen(app.get('port'),() => {
     console.log(`https://localhost:${app.get('port')}`)
 })
 
