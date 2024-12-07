@@ -1,41 +1,60 @@
 const {Schema,model} = require('mongoose')
 
 const SchemaInventario = Schema({
-    name:{
-        type:String,
-        required:[true],
-        default:''
-    },
-    status:{
-        type:String,
-        required:[true,'Activo','Inactivo'],
-        enum:['Activo','Inactivo']
-    },
-    email:{
-        type:String,
+    serial:{
+        Types:Number,
         required:[true],
         unique:true,
-        default:'gmail'
-    },
-    password:{
-        type:String,
-        required:[true]
-    },
-    rol:{
-        type:String,
-        required:[true,'Administrador','Docente'],
-        enum:['Administrador','Docente'],
         default:''
     },
-    createDate:{
-        type:Date,
-        default: new Date()
+    modelo:{
+        Types:String,
+        required:[true]
     },
-    updateDate:{
-        type:Date,
-        default: new Date()
+    descripcion:{
+        Types:String,
+        required:true
+    },
+    foto:{
+        Types:String,
+        required:[true]
+    },
+    color:{
+        Types:String,
+        required:[true]
+    },
+    dateCompra:{
+        Types:Date,
+        required:[true]
+        
+    },
+    precio:{
+        Types:Number,
+        rquired:[true],
+        default:0.0
+    },
+    usuario:{
+        type:Schema.Types.ObjectId,
+        ref:'Usuario',
+        required:[true]
+    },
+    marca:{
+        type:Schema.Types.ObjectId,
+        ref:'Marca',
+        required:[true]
+    },
+    tipoEquipo:{
+        type:Schema.Types.ObjectId,
+        ref:'TipoEquipo',
+        required:[true]
+    },
+    EstadoEquipo:{
+        type:Schema.Types.ObjectId,
+        ref:'EstadoEquipo',
+        required:[true]
     }
 })
 
 
-module.exports = model('Usuario',SchemaInventario)
+
+module.exports = model('Inventario',SchemaInventario)
