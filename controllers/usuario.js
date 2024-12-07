@@ -2,7 +2,6 @@ const {request,response} = require('express')
 const Usuario = require('../models/usuario')
 const bcryptjs = require('bcryptjs')
 const {validationResult} = require('express-validator')
-const usuario = require('../models/usuario')
 
 const postUsuario = async (req=request,res=response) => {
     try{
