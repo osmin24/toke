@@ -8,7 +8,7 @@ const usuario = require('./routers/usuario')
 const estadoequipo = require('./routers/estadoequipo')
 const marca = require('./routers/marca')
 const tipoequipo = require('./routers/tipoequipo')
-
+const autenticados = require('./routers/autenticacion')
 
 app.set('port',process.env.PORT || 3000)
 app.use(express.json())
@@ -19,5 +19,8 @@ app.use('/usuario',usuario)
 app.use('/estadoequipo',estadoequipo)
 app.use('/marca',marca)
 app.use('/tipoequipo',tipoequipo)
+app.use('/autenticado',autenticados)
+
+
 
 module.exports = app

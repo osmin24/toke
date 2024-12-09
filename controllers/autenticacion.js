@@ -1,49 +1,55 @@
 const {request,response} = require('express')
 const Usuario = require('../models/usuario')
-const bcryptjs = require('bcryptjs')
 const {validationResult} = require('express-validator')
+const bcryptjs = require('bcryptjs')
+const {generarJ} = require('../jwt/jsowt')
 
-const postUsuario = async (req=request,res=response) => {
+const postAutenticacion = async (req=request,res=response) => {
     try{
         const error = validationResult(req)
         if(!error){
            return res.status(400).json({msg:'Error ckeck'+error.array()})
         }
 
-        const {name,password,email,rol,status} = req.body
-        const usuario = await Usuario.findOne({email})
-
-        if(usuario){
-            return res.status(400).json({msg:'Usuario ya registrado'})
+        const {_id} = req.body
+        const usuario = await Usuario.findOne({_id})
+        if(usuario.status === 'Activo'){
+            return res.status(400).json({msg:'Usuario ya autenticado'})
         }
+        const igual = bcryptjs.compareSync(req.body.password,usuario.password)
+        if(!igual){
+            return res.status(400).json({msg:'Erro de cliente'})
+        }
+
+
+        usuario.status = 'Activio'
+        const usuarioAut = await Usuario.findByIdAndUpdate(_id,{status:usuario.status},{new:true})
+        const toke = generarJ(usuario)
+
+        const {name,password,email,rol,status} = usuarioAut
+        const usuarioToke = {name,password,email,rol,status, accesotoke:toke}
+        return res.status(201).json(usuarioToke)
         
-        const sal = await bcryptjs.genSalt()
-        const passwordCript = await bcryptjs.hash(password,sal)
-
-        const data = {name,password:passwordCript,email,rol,status}
-        const usuarioBD = new Usuario(data)
-
-        usuarioBD.save()
-        return res.status(201).json(usuarioBD)
-
     }catch(e){
         return res.status(500).json({msg:'Error servidor: '+e})
     }
 }
 
-const getUsuarios = async (req=request,res=response)=>{
+const getAutenticacions = async (req=request,res=response)=>{
     try{
-        const usuarios = await Usuario.find()
+        const {status} = req.body
+        const usuarios = await Usuario.find({status})
         if(!usuarios){
-            return res.status(400).json({msg:'No existe usuario'})
+            return res.status(400).json({msg:'No existe usuario autenticado'})
         }
         return res.status(203).json(usuarios)
     }catch(e){
+        console.info(e)
         return res.status(500).json({msg:'ERROR SERVIDOR:'+e})
     }
 }
 
-const getUsuario = async (req=request,res=response) => {
+const getAutenticacion = async (req=request,res=response) => {
     try{
         const {_id} = req.body
         const usuario = await Usuario.findOne({_id})
@@ -74,8 +80,7 @@ const deleteUsuario = async (req=request,res=response) => {
     }
 }
 module.exports = {
-    postUsuario,
-    getUsuarios,
-    getUsuario,
-    deleteUsuario,
+    postAutenticacion,
+    getAutenticacions,
+    getAutenticacion
 }
